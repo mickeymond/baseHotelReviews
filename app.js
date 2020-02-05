@@ -94,10 +94,20 @@ io.on('connection', function(socket) {
               });
               break;
             case "san-francisco":
-
+              makeQuery("filter(city::"+context.best+").term(hotel,count:50).average(enriched_text.sentiment.document.score)")
+              .then(results => {
+                const [ bestHotel, highestSent ] = findBestHotel(results);
+                // console.log(bestHotel, highestSent);
+                io.emit('chat message', "The best hotel in San Francisco is " + bestHotel.replace(/_/g," ") + " with an average sentiment of " + highestSent.toFixed(2));
+              });
               break;
             case "chicago":
-
+              makeQuery("filter(city::"+context.best+").term(hotel,count:50).average(enriched_text.sentiment.document.score)")
+              .then(results => {
+                const [ bestHotel, highestSent ] = findBestHotel(results);
+                // console.log(bestHotel, highestSent);
+                io.emit('chat message', "The best hotel in Chicago is " + bestHotel.replace(/_/g," ") + " with an average sentiment of " + highestSent.toFixed(2));
+              });
               break;
           } 
         } else if (context.list) {
